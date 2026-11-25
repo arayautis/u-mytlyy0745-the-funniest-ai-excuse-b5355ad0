@@ -20,9 +20,15 @@ MAX_LINE_CHARS = 200
 
 
 def validate_line(line: str) -> None:
-    """Check the entry line fits the rules: 1-200 UTF-8 chars, one line."""
+    """Check the entry line fits the rules: 1-200 UTF-8 chars, one line.
+
+    The sealed scorer also rejects a line that is only white space, so a
+    blank-looking line fails here too instead of at grading time.
+    """
     if not line:
         raise ValueError("entry line must not be empty")
+    if not line.strip():
+        raise ValueError("entry line must not be only white space")
     if len(line.encode("utf-8")) > MAX_LINE_CHARS:
         raise ValueError(
             f"entry line is {len(line.encode('utf-8'))} UTF-8 chars, "
